@@ -266,7 +266,7 @@
 
 
 # Логическая архитектура
-![](https://imgur.com/a/FRdbs)
+![](https://i.imgur.com/UC7oOrq.png)
 
 
 
