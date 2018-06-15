@@ -1,6 +1,6 @@
 import sqlite3
 import sys
-from Tracker.ParserAPI.parser import *
+from Tracker.parser_api.parser import *
 
 
 def main():
