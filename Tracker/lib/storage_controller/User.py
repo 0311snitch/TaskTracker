@@ -11,18 +11,19 @@ class UserStorage:
     def add_user_to_db(cls, user):
         conn = sqlite3.connect('database.sqlite3')
         c = conn.cursor()
-        c.execute("SELECT username FROM users")
-        all_usernames = c.fetchall()
-        for i in all_usernames:
-            if user.username == i[0]:
-                raise ProjectWithThisNameAlreadyExist
-        print(all_usernames)
         c.execute(
-            "INSERT INTO users (username, password, email, token) VALUES ('%s', '%s', '%s', '%s')" % (
-            user.username, user.password
-            , user.email, user.token))
+            "INSERT INTO users (username, password, email) VALUES ('%s', '%s', '%s')" % (user.username, user.password,
+                                                                                         user.email))
         conn.commit()
         conn.close()
+
+    @classmethod
+    def get_all_users(cls):
+        conn = sqlite3.connect('database.sqlite3')
+        c = conn.cursor()
+        c.execute("SELECT username FROM users")
+        all_usernames = c.fetchall()
+        return all_usernames
 
     @classmethod
     def get_project(cls, name):
@@ -34,30 +35,15 @@ class UserStorage:
         return project
 
     @classmethod
-    def get_user_by_token(cls, token):
-        conn = sqlite3.connect('database.sqlite3')
-        c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE token==('%s')" % token)
-        data = c.fetchone()
-        if not data:
-            return user_view.failed()
-        else:
-            user = User(data[1], data[2], data[3], data[4], data[0])
-            return user
-
-    @classmethod
     def get_user_by_name(cls, name):
         conn = sqlite3.connect('database.sqlite3')
         c = conn.cursor()
         c.execute("SELECT * FROM users WHERE username==('%s')" % name)
         data = c.fetchone()
-        if not data:
-            return user_view.failed()
+        if data is None:
+            raise NoUser
         else:
-            try:
-                user = User(data[1], data[2], data[3], data[4], data[0])
-            except:
-                raise NoUser
+            user = User(data[1], data[2], data[3], data[0])
             return user
 
     @classmethod
@@ -66,15 +52,15 @@ class UserStorage:
         c = conn.cursor()
         c.execute("SELECT * FROM users WHERE id==('%s')" % id)
         data = c.fetchone()
-        if not data:
-            return user_view.failed()
+        if data is None:
+            return NoUser
         else:
-            user = User(data[1], data[2], data[3], data[4], data[0])
+            user = User(data[1], data[2], data[3], data[0])
             return user
 
     @classmethod
-    def delete_user(cls):
-        user = UserStorage.get_current_user()
+    def delete_user(cls, name):
+        user = UserStorage.get_user_by_name(name)
         conn = sqlite3.connect('database.sqlite3')
         c = conn.cursor()
         c.execute("DELETE FROM users WHERE username==('%s')" % user.username)
@@ -95,26 +81,19 @@ class UserStorage:
 
     @classmethod
     def set_password_for_user(cls, user):
-        try:
-            conn = sqlite3.connect('database.sqlite3')
-            c = conn.cursor()
-            c.execute("UPDATE users SET password=('%s') WHERE username==('%s')"%(user.password,user.username))
-            conn.commit()
-            conn.close()
-        except:
-            print("Ошибка выполнения")
+        conn = sqlite3.connect('database.sqlite3')
+        c = conn.cursor()
+        c.execute("UPDATE users SET password=('%s') WHERE username==('%s')" % (user.password, user.username))
+        conn.commit()
+        conn.close()
 
     @classmethod
     def set_username_for_user(cls, user, oldname):
-        try:
-            conn = sqlite3.connect('database.sqlite3')
-            c = conn.cursor()
-            c.execute("UPDATE users SET username=('%s') WHERE username==('%s')"%(user.username,oldname))
-            conn.commit()
-            conn.close()
-        except:
-            print(error)
-            print("Ошибка выполнения")
+        conn = sqlite3.connect('database.sqlite3')
+        c = conn.cursor()
+        c.execute("UPDATE users SET username=('%s') WHERE username==('%s')" % (user.username, oldname))
+        conn.commit()
+        conn.close()
 
     @classmethod
     def set_current_user(cls, username):

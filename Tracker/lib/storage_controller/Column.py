@@ -2,12 +2,13 @@ import sqlite3
 
 from Tracker.lib.models.Column import Column
 from Tracker.lib.storage_controller.Project import ProjectStorage
+from Tracker.lib.Exception import *
 
 
 class ColumnStorage:
 
     @classmethod
-    def add_column_to_db(cls,column):
+    def add_column_to_db(cls, column):
         """
         Добавление колонки в таблицу columns базы данных
         :param column:
@@ -22,15 +23,24 @@ class ColumnStorage:
             if i[0] == column.name:
                 have = True
         if not have:
-            c.execute("INSERT INTO columns (name, desc, project_id) VALUES ('%s', '%s', '%s')" % (column.name,
-                                                                                                       column.desc,
-                                                                                                       column.project_id))
+            c.execute("INSERT INTO columns (name, desc, project_id) VALUES ('%s', '%s', '%d')" % (column.name,
+                                                                                                  column.desc,
+                                                                                                  column.project_id))
             conn.commit()
             conn.close()
-            return 0
         else:
-            print("Колонка с таким названием уже существует в проекте")
-            return 1
+            raise ColumnWithThisNameAlreadyExist
+
+
+    @classmethod
+    def save(self, column):
+        conn = sqlite3.connect('database.sqlite3')
+        c = conn.cursor()
+        c.execute(
+            "UPDATE columns SET name=('%s'),desc=('%s'),project_id=('%s') WHERE id==('%d')" % (column.name, column.desc,
+                                                                                     column.project_id, column.id))
+        conn.commit()
+        conn.close()
 
     @classmethod
     def delete_column_from_db(cls, column):
@@ -41,7 +51,7 @@ class ColumnStorage:
         """
         conn = sqlite3.connect('database.sqlite3')
         c = conn.cursor()
-        c.execute("DELETE FROM columns WHERE name == ('%s') AND project_id==('%s')"%(column.name, column.project_id))
+        c.execute("DELETE FROM columns WHERE name == ('%s') AND project_id==('%s')" % (column.name, column.project_id))
         conn.commit()
         conn.close()
         return 0
@@ -57,10 +67,15 @@ class ColumnStorage:
         conn = sqlite3.connect('database.sqlite3')
         c = conn.cursor()
         project = ProjectStorage.get_project(project_name)
-        c.execute("SELECT * FROM columns WHERE name==('%s') AND project_id==('%s')" % (name,project.id))
+        c.execute("SELECT * FROM columns WHERE name==('%s') AND project_id==('%s')" % (name, project.id))
         data = c.fetchone()
-        column = Column(data[1],data[2],data[3],data[0])
-        return column
+        try:
+            column = Column(data[1], data[2], data[3], data[0])
+            conn.close()
+            return column
+        except:
+            conn.close()
+            raise NoColumnWithThisName
 
     @classmethod
     def get_all_columns(cls, project_name):
@@ -73,10 +88,9 @@ class ColumnStorage:
         conn = sqlite3.connect('database.sqlite3')
         c = conn.cursor()
         project = ProjectStorage.get_project(project_name)
-        c.execute("SELECT * FROM columns WHERE project_id==('%s')"%project.id)
+        c.execute("SELECT * FROM columns WHERE project_id==('%s')" % project.id)
         data = c.fetchall()
         for i in data:
-            column = Column(i[1],i[2],i[3],i[0])
+            column = Column(i[1], i[2], i[3], i[0])
             cols.append(column)
         return cols
-

@@ -1,0 +1,76 @@
+2018-06-25 22:10:42,861, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-25 22:18:51,096, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-25 22:18:58,471, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-25 22:19:13,334, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-25 22:43:31,603, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-25 22:43:46,806, parser, [ERROR]: Неправильный пароль
+2018-06-25 22:56:52,146, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-25 22:57:33,972, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-25 23:32:53,842, parse_user, [ERROR]: Incorrect number of arguments. Expected 3 , but 0 was recieved
+2018-06-26 17:42:15,885, parser, [ERROR]: Incorrect number of arguments
+2018-06-26 17:42:17,799, parser, [ERROR]: No subcommand
+2018-06-26 17:42:19,884, parse_project, [ERROR]: Incorrect number of arguments. Expected 4 , but 0 was recieved
+2018-06-26 17:42:25,028, parse_project, [ERROR]: Incorrect number of arguments. Expected 4 , but 1 was recieved
+2018-06-26 17:42:26,766, parse_project, [ERROR]: Incorrect number of arguments. Expected 4 , but 2 was recieved
+2018-06-26 17:42:32,751, parser, [ERROR]: Неправильный пароль
+2018-06-26 17:47:44,617, parse_project, [ERROR]: Incorrect number of arguments. Expected 3, but 0 was recieved
+2018-06-26 17:50:56,666, parser, [ERROR]: Incorrect password
+2018-06-26 17:54:59,310, parser, [ERROR]: Такой категории команд не существует
+2018-06-26 17:55:03,651, parser, [ERROR]: Нет такой команды
+2018-06-26 17:55:08,602, parser, [ERROR]: Incorrect password
+2018-06-26 19:58:53,177, parser, [ERROR]: No subcommand
+2018-06-26 19:58:57,231, parse_project, [ERROR]: Incorrect number of arguments. Expected 4 , but 0 was recieved
+2018-06-26 19:59:10,237, parse_project, [ERROR]: Incorrect number of arguments. Expected 4 , but 1 was recieved
+2018-06-26 20:01:45,937, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-26 20:02:03,248, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-26 20:13:11,579, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-26 20:16:18,091, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-26 20:17:02,600, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-26 20:22:36,511, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-26 20:23:43,109, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-26 20:23:53,313, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-26 20:31:58,095, add_person_to_project, [ERROR]: A user with this name is already exist in this project
+2018-06-26 20:31:58,095, parser, [ERROR]: This user is already exitst in this project
+2018-06-26 20:32:06,005, add_person_to_project, [ERROR]: A user with this name is already exist in this project
+2018-06-26 20:32:06,005, parser, [ERROR]: This user is already exitst in this project
+2018-06-28 16:22:50,782, parser, [ERROR]: Incorrect number of arguments
+2018-06-28 16:22:52,938, parser, [ERROR]: No subcommand
+2018-06-28 16:22:54,625, parser, [ERROR]: Нет такой команды
+2018-06-28 16:22:58,063, parse_column, [ERROR]: Incorrect number of arguments. Expected 5 , but 0 was recieved
+2018-06-28 16:23:04,274, parse_column, [ERROR]: Incorrect number of arguments. Expected 5 , but 3 was recieved
+2018-06-28 16:25:41,545, parser, [ERROR]: Column with this name is already exist
+2018-06-28 16:28:21,888, parser, [ERROR]: Column with this name is already exist
+2018-06-28 16:28:38,735, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:28:43,364, parse_column, [ERROR]: Incorrect number of arguments. Expected 3 , but 4 was recieved
+2018-06-28 16:28:52,333, parse_column, [ERROR]: Incorrect number of arguments. Expected 3 , but 4 was recieved
+2018-06-28 16:32:14,101, parser, [ERROR]: Невозможно получить проект с указанным названием
+2018-06-28 16:34:15,358, parser, [ERROR]: Невозможно получить проект с указанным названием
+2018-06-28 16:34:23,362, delete_column, [ERROR]: You are not the Creator of the project
+2018-06-28 16:34:23,363, parser, [ERROR]: You are not the Creator of this project
+2018-06-28 16:36:47,783, delete_column, [ERROR]: You are not the Creator of the project
+2018-06-28 16:36:47,784, parser, [ERROR]: You are not the Creator of this project
+2018-06-28 16:36:59,857, delete_column, [ERROR]: You are not the Creator of the project
+2018-06-28 16:36:59,858, parser, [ERROR]: You are not the Creator of this project
+2018-06-28 16:37:36,831, delete_column, [ERROR]: You are not the Creator of the project
+2018-06-28 16:37:36,831, parser, [ERROR]: You are not the Creator of this project
+2018-06-28 16:37:49,480, delete_column, [ERROR]: You are not the Creator of the project
+2018-06-28 16:37:49,481, parser, [ERROR]: You are not the Creator of this project
+2018-06-28 16:40:45,513, parser, [ERROR]: There is no column with this name
+2018-06-28 16:41:47,764, parser, [ERROR]: There is no column with this name
+2018-06-28 16:41:58,418, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:42:45,892, parser, [ERROR]: There is no column with this name
+2018-06-28 16:42:52,673, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:42:54,213, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:43:04,268, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:43:06,647, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:43:08,514, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:44:38,514, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:44:57,894, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:45:00,771, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:45:17,741, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:45:22,128, parse_column, [ERROR]: Incorrect number of arguments. Expected 4 , but 2 was recieved
+2018-06-28 16:45:41,389, parse_column, [ERROR]: Incorrect number of arguments. Expected 4 , but 2 was recieved
+2018-06-28 16:45:43,382, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:46:43,220, parser, [ERROR]: Не существует пользователя с таким именем
+2018-06-28 16:46:56,430, parse_column, [ERROR]: Incorrect number of arguments. Expected 4 , but 2 was recieved
+2018-06-28 16:47:15,712, parser, [ERROR]: Невозможно получить проект с указанным названием

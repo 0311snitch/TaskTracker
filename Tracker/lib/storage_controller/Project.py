@@ -122,9 +122,8 @@ class ProjectStorage:
             conn.close()
             return project
         except:
-            print("Невозможно получить проект с таким названием")
             conn.close()
-            # return -1
+            raise CannotGetProject
 
     @classmethod
     def show_all(cls):
@@ -163,8 +162,8 @@ class ProjectStorage:
         guys = ProjectStorage.get_all_persons_in_project(project)
         for i in guys:
             if i[0] == person.user_id:
-                return 0
-        return 1
+                return
+        raise NoPermission
 
     @classmethod
     def is_admin(cls, person, project):
@@ -178,5 +177,16 @@ class ProjectStorage:
         c = conn.cursor()
         guys = ProjectStorage.get_all_persons_in_project(project)
         if guys[0][0] == person.user_id:
-            return 0
-        return 1
+            pass
+        else:
+            raise UAreNotAdmin
+
+    @classmethod
+    def save(self, project):
+        conn = sqlite3.connect('database.sqlite3')
+        c = conn.cursor()
+        c.execute(
+            "UPDATE projects SET name=('%s'),description=('%s') WHERE id==('%d')" % (project.name, project.description,
+                                                                                     project.id))
+        conn.commit()
+        conn.close()

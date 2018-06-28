@@ -6,14 +6,15 @@ from Tracker.lib.storage_controller.Column import *
 from Tracker.lib.storage_controller.Project import *
 from Tracker.lib.storage_controller.Task import *
 from Tracker.lib.storage_controller.User import *
+import Tracker.lib.logger as logger
 
 class TaskController:
     @classmethod
     def add_task(cls, username, password, project_name, column_name, name, desc, first_date, second_date, tags,
                  priority):
         """
-        Создает задачу в выбранной колонке выбранного проекта с указанными временными рамками, тегами и приоритетом
-        задачи
+        Creates a task in the selected column of the selected project with the specified time frame, tags, and priority
+        tasks
         :param username:
         :param password:
         :param project_name:
@@ -26,6 +27,8 @@ class TaskController:
         :param priority:
         :return:
         """
+        log_tag = "task_create"
+        log = logger.get_logger(log_tag)
         project = ProjectStorage.get_project(project_name)
         column = ColumnStorage.get_column(project_name, column_name)
         user = UserStorage.get_user_by_name(username)
@@ -37,29 +40,29 @@ class TaskController:
                     raise EndBeforeStart
             except Exception:
                 raise NotDate
-            if ProjectStorage.check_permission(user, project) == 0:
-                task_names = TaskStorage.get_all_tasks(project_name, column_name)
-                have = False
-                for i in task_names:
-                    if i.name == name:
-                        have = True
-                if not have:
-                    task = Task(name, desc, project.id, column.id, user.user_id, first_date, second_date, str(date.today()),tags,
-                                priority, 0, 0)
-                    TaskStorage.add_task_to_db(task)
-                    return task
-                else:
-                    print(228)
-                    raise TaskWithThisNameAlreadyExist(name)
+            ProjectStorage.check_permission(user, project)
+            task_names = TaskStorage.get_all_tasks(project_name, column_name)
+            have = False
+            for i in task_names:
+                if i.name == name:
+                    have = True
+            if not have:
+                task = Task(name, desc, project.id, column.id, user.user_id, first_date, second_date, str(date.today()),
+                            tags,
+                            priority, 0, 0)
+                TaskStorage.add_task_to_db(task)
+                return task
             else:
-                raise NoPermission
+                log.error("Task with this name is already exist")
+                raise TaskWithThisNameAlreadyExist(name)
         else:
+            log.error("Incorrect password for {}".format(username))
             raise IncorrentPassword
 
     @classmethod
     def delete_task(cls, username, password, project_name, column_name, task_name):
         """
-        Удаление указанной задачи
+        Delete the specified task
         :param username:
         :param password:
         :param project_name:
@@ -67,62 +70,67 @@ class TaskController:
         :param task_name:
         :return:
         """
+        log_tag = "task_delete"
+        log = logger.get_logger(log_tag)
         user = UserStorage.get_user_by_name(username)
         project = ProjectStorage.get_project(project_name)
         if user.password == password:
-            if ProjectStorage.is_admin(user, project) == 0:
-                try:
-                    task = TaskStorage.get_task(project_name, column_name, task_name)
-                except Exception:
-                    raise NoTask
-                if task.archive == '1':
-                    raise AlreadyInArchive
+            ProjectStorage.is_admin(user, project)
+            try:
+                task = TaskStorage.get_task(project_name, column_name, task_name)
+            except Exception:
+                log.error("There is no task with this name")
+                raise NoTask
+            if task.archive == '1':
+                log.error("Task is already in archive")
+                raise AlreadyInArchive
+            else:
+                if task.is_subtask == 1:
+                    task.archive = 1
+                    task._save()
                 else:
-                    if task.is_subtask == 1:
+                    list = TaskStorage.get_all_subtasks(project_name, column_name, task)
+                    can = True
+                    for i in list:
+                        if i.archive != '1':
+                            can = False
+                    if can:
                         task.archive = 1
                         task._save()
                     else:
-                        list = TaskStorage.get_all_subtasks(project_name, column_name, task)
-                        can = True
-                        for i in list:
-                            if i.archive != '1':
-                                can = False
-                        if can:
-                            task.archive = 1
-                            task._save()
-                        else:
-                            raise CanNotDeleteBecauseSubtasks
-            else:
-                raise UAreNotAdmin
+                        log.eror("Can not to delete task, because task have some subtask")
+                        raise CanNotDeleteBecauseSubtasks
         else:
+            log.error("Incorrect password for {}".format(username))
             raise IncorrentPassword
 
     @classmethod
     def show_tasks(cls, username, password, project_name, column_name):
         """
-        Показывает задачи для указанной колонкки
+        Shows tasks for the specified column
         :param username:
         :param password:
         :param project_name:
         :param column_name:
         :return:
         """
+        log_tag = "show_tasks"
+        log = logger.get_logger(log_tag)
         user = UserStorage.get_user_by_name(username)
         project = ProjectStorage.get_project(project_name)
         column = ColumnStorage.get_column(project_name, column_name)
         if user.password == password:
-            if ProjectStorage.check_permission(user, project) == 0:
-                tasks = TaskStorage.get_all_tasks(project_name, column_name)
-                return tasks
-            else:
-                raise NoPermission
+            ProjectStorage.check_permission(user, project)
+            tasks = TaskStorage.get_all_tasks(project_name, column_name)
+            return tasks
         else:
+            log.error("Incorrect password for {}".format(username))
             raise IncorrentPassword
 
     @classmethod
     def set_subtask(cls, username, password, project_name, column_name, task1, task2):
         """
-        Сделать task1 подзадачей task2
+        Make task 1 a subtask of task 2
         :param username:
         :param password:
         :param project_name:
@@ -131,6 +139,8 @@ class TaskController:
         :param task2:
         :return:
         """
+        log_tag = "set_subtask"
+        log = logger.get_logger(log_tag)
         user = UserStorage.get_user_by_name(username)
         project = ProjectStorage.get_project(project_name)
         if user.password == password:
@@ -152,18 +162,22 @@ class TaskController:
                                 task1.is_subtask = 1
                                 task1._save()
                             else:
+                                log.error("This task is already subtask")
                                 raise AlreadySubtask
                     else:
+                        log.error("Subtask date error")
                         raise SubtaskDateException
                 else:
+                    log.error("Task is already subtask")
                     raise AlreadySubtask
         else:
+            log.error("Incorrect password for {}".format(username))
             raise IncorrentPassword
 
     @classmethod
     def edit(cls, type_of_edit, username, password, project_name, column_name, task_name, new_value):
         """
-        Редактирование атрибута для указанной задачи
+        Editing an attribute for a specified task
         :param type_of_edit:
         :param username:
         :param password:
@@ -173,23 +187,26 @@ class TaskController:
         :param new_value:
         :return:
         """
+        log_tag = "edit_task"
+        log = logger.get_logger(log_tag)
         user = UserStorage.get_user_by_name(username)
         project = ProjectStorage.get_project(project_name)
         column = ColumnStorage.get_column(project_name, column_name)
         task = TaskStorage.get_task(project_name, column_name, task_name)
         if user.password == password:
-            if ProjectStorage.check_permission(user, project) == 0:
-                if type_of_edit == 'name':
-                    task.name = new_value
-                elif type_of_edit == 'description' or 'desc':
-                    task.desc = new_value
-                elif type_of_edit == 'tags':
-                    task.tags = new_value
-                elif type_of_edit == 'priority':
-                    try:
-                        task.priority = int(new_value)
-                    except:
-                        TypeErro
-                task._save()
+            ProjectStorage.check_permission(user, project)
+            if type_of_edit == 'name':
+                task.name = new_value
+            elif type_of_edit == 'description' or 'desc':
+                task.desc = new_value
+            elif type_of_edit == 'tags':
+                task.tags = new_value
+            elif type_of_edit == 'priority':
+                try:
+                    task.priority = int(new_value)
+                except:
+                    log.error("Type error")
+                    raise TypeErro
+            TaskStorage.save(task)
         else:
             raise IncorrentPassword

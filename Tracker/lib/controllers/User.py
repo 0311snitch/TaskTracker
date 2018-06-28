@@ -1,45 +1,72 @@
-import hmac, hashlib
+import Tracker.lib.logger as logger
 
 from Tracker.lib.models.User import User
 from Tracker.lib.storage_controller.User import UserStorage
+from Tracker.lib.Exception import *
 
 
 class UserController:
     @classmethod
     def reg(cls, username, password, email):
         """
-        Регистрация пользователя с указанным именем пользователя, паролем и e-mail
+        User registration with the specified data
         :param username:
         :param password:
         :param email:
         :return:
         """
-        sha = hmac.new(bytearray(username,'utf-8'), bytearray(email,'utf-8'), hashlib.sha256).hexdigest()
-        shav = sha[:7]
-        print(type(shav))
-        user = User(username, password, email,shav)
-        UserStorage.add_user_to_db(user)
-        return user
+        log_tag = "UserReg"
+        log = logger.get_logger(log_tag)
+        user = User(username, password, email)
+        users = UserStorage.get_all_users()
+        have = False
+        for i in users:
+            if i[0] == user.username:
+                have = True
+        if not have:
+            UserStorage.add_user_to_db(user)
+            return user
+        else:
+            log.error("User with this name is already exist")
+            raise UserAlreadyExist
 
     @classmethod
-    def edit(cls, username, password , param, newparam):
+    def edit(cls, username, password, param, newparam):
         """
-        Редактирование информации о пользователе
+        Editing user information
         :param username:
         :param password:
         :param param:
         :param newparam:
         :return:
         """
+        log_tag = "UserEdit"
+        log = logger.get_logger(log_tag)
         user = UserStorage.get_user_by_name(username)
         oldname = user.username
         if user.password == password:
             if param == 'name':
                 user.username = newparam
+                UserStorage.set_username_for_user(user, oldname)
             elif param == 'password':
                 user.password = newparam
-            return user, oldname
+                UserStorage.set_password_for_user(user)
+        else:
+            log.error("Incorrect password for {}".format(username))
+            raise IncorrentPassword
 
     @classmethod
-    def delete(cls):
-        UserStorage.delete_user()
+    def delete(cls, username, password):
+        """
+        Remove a user with the specified name
+        :param name:
+        :return:
+        """
+        log_tag = "UserDelete"
+        log = logger.get_logger(log_tag)
+        user = UserStorage.get_user_by_name(username)
+        if user.password == password:
+            UserStorage.delete_user(username)
+        else:
+            log.error("Incorrect password for {}".format(username))
+            raise IncorrentPassword

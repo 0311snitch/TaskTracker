@@ -35,6 +35,18 @@ class TaskStorage:
         conn.close()
 
     @classmethod
+    def save(self, task):
+        conn = sqlite3.connect('database.sqlite3')
+        c = conn.cursor()
+        c.execute("UPDATE tasks SET name=('%s'),desc=('%s'),project_id=('%s'),column_id=('%s'),user_id=('%s'),"
+                  "first_date=('%s'),second_date=('%s'), edit_date=('%s'), tags=('%s'),priority=('%s'),archive=('%s'),"
+                  "is_subtask=('%s') WHERE id ==('%s')"
+                  % (task.name, task.desc, task.project_id, task.column_id, task.user_id, task.first_date,
+                     task.second_date, task.edit_date, task.tags, task.priority, task.archive, task.is_subtask, task.id))
+        conn.commit()
+        conn.close()
+
+    @classmethod
     def get_task(cls, project_name, column_name, name):
         conn = sqlite3.connect('database.sqlite3')
         c = conn.cursor()

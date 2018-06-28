@@ -1,43 +1,33 @@
 def success_create(project):
-    print("\n\nПроект успешно создан.\nНазвание - {}\nОписание - {}\n\n".format(project.name, project.description))
-
-
-def need_token():
-    print("Не указан токен пользователя или неправильное количесво аргументов")
+    print("\n\nProject is successfully created.\nTitle - {}\nDescription - {}\n\n".format(project.name,
+                                                                                          project.description))
 
 
 def add_format():
-    print(
-        "Неправильный формат. Для добавления проекта введите команду вида project add 'username' 'password' 'project name' 'description of project'")
+    print("Wrong format. To add a project, enter a command like project add 'username' 'password' 'project name' "
+          "'description of project'")
+
+
+def members_add_format():
+    print("Wrong format. To add a user to the project, enter a command like project members add/delete 'username' "
+          "'password  'project name' 'user to add'")
+
+
+def user_added():
+    print("User is successfully added to project")
+
+
+def user_deleted():
+    print("User is successfully deleted from project")
 
 
 def delete_format():
     print(
-        "Неправильный формат. Для удаления проекта введите команду вида project delete 'username' 'password' 'project name'")
+        "Wrong format. To delete a project, enter a command like project delete 'username' 'password' 'project name'")
 
 
 def success_delete():
-    print("Проект был успешно удален")
-
-
-def failed():
-    print("Проект с таким названием уже есть. Выберите существующий проект или удалите проект для создания нового.")
-
-
-def need_user():
-    print("Для того, чтобы создать новый проект необходимо сначала авторизоваться")
-
-
-def sucess_added_to_project():
-    print("Пользователь был успешно добавлен в проект")
-
-
-def project_selected(project):
-    print("Вы успешно выбрали проект {}".format(project.name))
-
-
-def project_already_selected():
-    print("Вы пытаетесь выбрать проект, который уже является выбранным")
+    print("Project is successfully deleted")
 
 
 def show_info(project_list):
@@ -50,37 +40,13 @@ def show_info(project_list):
 
 
 def success_save():
-    print("Проект был успешно сохранен")
+    print("Project is successfully saved")
 
 
 def success_edit():
-    print("Проект был успешно изменен.")
-
-
-def create_error():
-    print("Ошибка создания проекта")
-
-
-def permission_error():
-    print("У вас нет доступа к этому проекту")
-
-
-def delete_error():
-    print("Ошибка удаления проекта")
-
-
-def already_exist():
-    print("Данный пользователь уже есть в проекте")
-
-
-def not_exist():
-    print("Такого пользователя нет в проекте")
+    print("Project is successfully edited")
 
 
 def edit_format():
     print(
-        "Для изменения проекта необходимо ввести команду в следующем формате project edit 'name/desc' 'username' 'password' 'project name'")
-
-
-def cannot_delete_admin():
-    print("Нельзя удалить создателя проекта")
+        "Wrong format. To edit a project, enter a command like project edit 'name/desc' 'username' 'password' 'project name'")
