@@ -1,10 +1,14 @@
 from enum import Enum
+
+import os
+
 import Tracker.console.presentations.Column as column_view
 import Tracker.console.presentations.User as user_view
 import Tracker.console.presentations.Project as project_view
 from Tracker.console.presentations.Project import *
 from Tracker.console.presentations.RegularTask import *
 from Tracker.console.presentations.Task import *
+from Tracker.lib import conf
 from Tracker.lib.controllers.Column import *
 from Tracker.lib.controllers.Project import *
 from Tracker.lib.controllers.RegularTask import *
@@ -13,6 +17,7 @@ from Tracker.lib.controllers.User import *
 from Tracker.lib.storage_controller.Task import *
 from Tracker.lib.storage_controller.User import *
 import Tracker.lib.logger as logger
+import Tracker.console.config as config
 
 
 class Categories(Enum):
@@ -99,6 +104,17 @@ def check_notifications(username, password):
     else:
         raise IncorrentPassword
 
+def check_db_exists(path):
+
+    config.check_tracker_folder(path)
+    path_to_db = os.path.join(path, 'database.sqlite3')
+    #if not os.path.exists(path_to_db):
+     #   ControlTask.create_tables(path_to_db)
+      #  ControlPlan.create_tables(path_to_db)
+       # ControlUser.create_tables(path_to_db)
+        #ControlProject.create_tables(path_to_db)
+        #ControlNotif.create_tables(path_to_db)
+
 
 def parse(args):
     """
@@ -109,6 +125,9 @@ def parse(args):
     log_tag = "parser"
     log = logger.get_logger(log_tag)
     count = len(args)
+    check_db_exists(conf.get_path_to_db())
+    path = conf.get_path_to_db()
+    path = os.path.join(path, 'database.sqlite3')
     if count == 0:
         no_category()
         log.error('Incorrect number of arguments')

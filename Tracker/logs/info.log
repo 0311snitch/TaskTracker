@@ -1,0 +1,6 @@
+2018-06-29 01:03:24,696, parser, [INFO]: List of arguments : ['user', 'register', 'Trippie Red', 'rapper', 'rapper@xxl.com']
+2018-06-29 01:03:24,696, parse_user, [INFO]: Attempt to register a user with a name - Trippie Red, password -  rapper and e-mail - rapper@xxl.com
+2018-06-29 01:11:12,792, parser, [INFO]: List of arguments : ['user', 'register', 'Trippie Red', 'rapper', 'rapper@xxl.com']
+2018-06-29 01:11:12,793, parse_user, [INFO]: Attempt to register a user with a name - Trippie Red, password -  rapper and e-mail - rapper@xxl.com
+2018-06-29 01:30:32,830, parser, [INFO]: List of arguments : ['user', 'register', 'Trippie Red', 'rapper', 'rapper@xxl.com']
+2018-06-29 01:30:32,830, parse_user, [INFO]: Attempt to register a user with a name - Trippie Red, password -  rapper and e-mail - rapper@xxl.com

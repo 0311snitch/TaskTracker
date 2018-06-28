@@ -1,9 +1,13 @@
 import logging
 import os
+import Tracker.lib.conf as conf
+import sys
 
-DEFAULT_PATH_HIGH = 'info/error.log'
-DEFAULT_PATH_LOW = 'info/info.log'
+PATH_TO_SCRIPT  = conf.get_path_to_logger()
 
+DEFAULT_PATH_HIGH = PATH_TO_SCRIPT + '/logs/error.log'
+print(conf.get_path_to_db())
+DEFAULT_PATH_LOW =  PATH_TO_SCRIPT + '/logs/info.log'
 DEBUG = logging.DEBUG
 INFO = logging.INFO
 WARNING = logging.WARNING

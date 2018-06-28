@@ -1,4 +1,5 @@
 import sqlite3
+import Tracker.lib.conf as conf
 
 from Tracker.lib.Exception import *
 from Tracker.lib.models.Project import *
@@ -14,7 +15,7 @@ class ProjectStorage:
         :param user:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("SELECT name, user_id FROM projects")
         all_projectnames = c.fetchall()
@@ -42,7 +43,7 @@ class ProjectStorage:
         :param project:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("SELECT user_id FROM user_project WHERE project_id ==('%s')" % project.id)
         data = c.fetchall()
@@ -56,7 +57,7 @@ class ProjectStorage:
         :return:
         """
         projects = []
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("SELECT * FROM projects WHERE user_id ==('%s')" % user_id)
         data = c.fetchall()
@@ -73,7 +74,7 @@ class ProjectStorage:
         :param project:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("INSERT INTO user_project (user_id, project_id) VALUES ('%d','%d')"%(person.user_id,project.id))
         conn.commit()
@@ -87,7 +88,7 @@ class ProjectStorage:
         :param project:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("DELETE FROM user_project WHERE user_id ==('%s') AND project_id==('%s')"% (person.user_id, project.id))
         conn.commit()
@@ -100,7 +101,7 @@ class ProjectStorage:
         :param project:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("DELETE FROM projects WHERE name=('%s')" % project.name)
         conn.commit()
@@ -113,7 +114,7 @@ class ProjectStorage:
         :param name:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("SELECT * FROM projects WHERE name==('%s')" % name)
         project_info = c.fetchone()
@@ -132,7 +133,7 @@ class ProjectStorage:
         :return:
         """
         project_list = []
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("SELECT name, description, user_id, id FROM projects")
         data = c.fetchall()
@@ -157,7 +158,7 @@ class ProjectStorage:
         :param project:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         guys = ProjectStorage.get_all_persons_in_project(project)
         for i in guys:
@@ -173,7 +174,7 @@ class ProjectStorage:
         :param project:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         guys = ProjectStorage.get_all_persons_in_project(project)
         if guys[0][0] == person.user_id:
@@ -183,7 +184,7 @@ class ProjectStorage:
 
     @classmethod
     def save(self, project):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute(
             "UPDATE projects SET name=('%s'),description=('%s') WHERE id==('%d')" % (project.name, project.description,

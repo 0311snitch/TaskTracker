@@ -1,5 +1,5 @@
 import sqlite3
-
+import Tracker.lib.conf as conf
 from Tracker.lib.Exception import *
 from Tracker.lib.models.Task import *
 from Tracker.lib.storage_controller.Column import *
@@ -19,7 +19,7 @@ class TaskStorage:
 
     @classmethod
     def delete_task_from_db(cls, task):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("DELETE FROM tasks WHERE task.id==('%s')"%task.id)
         conn.commit()
@@ -27,7 +27,7 @@ class TaskStorage:
 
     @classmethod
     def send_to_archive(cls, task):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute(
             "UPDATE tasks SET archive=('%s') WHERE name==('%s') AND column_id==('%s')" % (1, task.name, task.column_id))
@@ -36,7 +36,7 @@ class TaskStorage:
 
     @classmethod
     def save(self, task):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("UPDATE tasks SET name=('%s'),desc=('%s'),project_id=('%s'),column_id=('%s'),user_id=('%s'),"
                   "first_date=('%s'),second_date=('%s'), edit_date=('%s'), tags=('%s'),priority=('%s'),archive=('%s'),"
@@ -48,7 +48,7 @@ class TaskStorage:
 
     @classmethod
     def get_task(cls, project_name, column_name, name):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         column = ColumnStorage.get_column(project_name, column_name)
         c.execute("SELECT * FROM tasks WHERE column_id==('%s') AND name==('%s')" % (column.id, name))
@@ -62,7 +62,7 @@ class TaskStorage:
 
     @classmethod
     def get_all_tasks(cls, project_name, column_name):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         project = ProjectStorage.get_project(project_name)
         column = ColumnStorage.get_column(project_name, column_name)
@@ -77,7 +77,7 @@ class TaskStorage:
 
     @classmethod
     def get_task_by_id(cls, project_name, column_name, id):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         column = ColumnStorage.get_column(project_name, column_name)
         c.execute("SELECT * FROM tasks WHERE column_id==('%s') AND id==('%s')" % (column.id, id))
@@ -88,7 +88,7 @@ class TaskStorage:
 
     @classmethod
     def get_all_subtasks(cls, project_name, column_name, task):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("SELECT * FROM task_subtask WHERE task_id == ('%s')"% task.id)
         data = c.fetchall()
@@ -100,7 +100,7 @@ class TaskStorage:
 
     @classmethod
     def set_subtask(cls, task1, task2):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("INSERT INTO task_subtask (subtask_id, task_id) VALUES ('%s','%s')" % (task1.id, task2.id))
         conn.commit()

@@ -1,0 +1,6 @@
+2018-06-29 01:03:24,697, UserReg, [ERROR]: User with this name is already exist
+2018-06-29 01:03:24,697, parser, [ERROR]: A user with this name is already registered
+2018-06-29 01:11:12,798, UserReg, [ERROR]: User with this name is already exist
+2018-06-29 01:11:12,798, parser, [ERROR]: A user with this name is already registered
+2018-06-29 01:30:32,832, UserReg, [ERROR]: User with this name is already exist
+2018-06-29 01:30:32,833, parser, [ERROR]: A user with this name is already registered

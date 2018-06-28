@@ -14,7 +14,7 @@ class ColumnStorage:
         :param column:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("SELECT name FROM columns WHERE project_id==('%s')" % column.project_id)
         data = c.fetchall()
@@ -34,7 +34,7 @@ class ColumnStorage:
 
     @classmethod
     def save(self, column):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute(
             "UPDATE columns SET name=('%s'),desc=('%s'),project_id=('%s') WHERE id==('%d')" % (column.name, column.desc,
@@ -49,7 +49,7 @@ class ColumnStorage:
         :param column:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("DELETE FROM columns WHERE name == ('%s') AND project_id==('%s')" % (column.name, column.project_id))
         conn.commit()
@@ -64,7 +64,7 @@ class ColumnStorage:
         :param name:
         :return:
         """
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         project = ProjectStorage.get_project(project_name)
         c.execute("SELECT * FROM columns WHERE name==('%s') AND project_id==('%s')" % (name, project.id))
@@ -85,7 +85,7 @@ class ColumnStorage:
         :return:
         """
         cols = []
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         project = ProjectStorage.get_project(project_name)
         c.execute("SELECT * FROM columns WHERE project_id==('%s')" % project.id)
