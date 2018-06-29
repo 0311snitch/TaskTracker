@@ -8,6 +8,7 @@ from Tracker.lib.storage_controller.Task import *
 from Tracker.lib.storage_controller.User import *
 import Tracker.lib.logger as logger
 
+
 class TaskController:
     @classmethod
     def add_task(cls, username, password, project_name, column_name, name, desc, first_date, second_date, tags,
@@ -33,13 +34,13 @@ class TaskController:
         column = ColumnStorage.get_column(project_name, column_name)
         user = UserStorage.get_user_by_name(username)
         if user.password == password:
-            try:
-                start = datetime.strptime(first_date, "%d.%m.%Y")
-                end = datetime.strptime(first_date, "%d.%m.%Y")
-                if end < start:
-                    raise EndBeforeStart
-            except Exception:
-                raise NotDate
+            # try:
+            start = datetime.strptime(first_date, "%d.%m.%Y")
+            end = datetime.strptime(second_date, "%d.%m.%Y")
+            if end < start:
+                raise EndBeforeStart
+            # except Exception:
+            # raise NotDate
             ProjectStorage.check_permission(user, project)
             task_names = TaskStorage.get_all_tasks(project_name, column_name)
             have = False
@@ -86,8 +87,7 @@ class TaskController:
                 raise AlreadyInArchive
             else:
                 if task.is_subtask == 1:
-                    task.archive = 1
-                    task._save()
+                    TaskStorage.delete_task_from_db(task)
                 else:
                     list = TaskStorage.get_all_subtasks(project_name, column_name, task)
                     can = True
@@ -95,8 +95,7 @@ class TaskController:
                         if i.archive != '1':
                             can = False
                     if can:
-                        task.archive = 1
-                        task._save()
+                        TaskStorage.delete_task_from_db(task)
                     else:
                         log.eror("Can not to delete task, because task have some subtask")
                         raise CanNotDeleteBecauseSubtasks

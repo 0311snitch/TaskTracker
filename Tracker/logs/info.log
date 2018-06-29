@@ -40,3 +40,10 @@
 2018-06-29 08:09:57,039, parser, [INFO]: List of arguments : ['column', 'add', 'test', 'test', 'TestProject', 'TestColumn', 'TestDesc']
 2018-06-29 08:09:57,041, parse_column, [INFO]: Trying to create a column with the name - TestColumn and description - TestDesc
 2018-06-29 08:09:57,131, parse_column, [INFO]: Column TestColumn was successfully created
+2018-06-29 09:32:20,403, parser, [INFO]: List of arguments : ['task', 'add']
+2018-06-29 09:33:16,354, parser, [INFO]: List of arguments : ['task', 'add', 'Antoha', '12345', 'Project337', 'NewColumn', 'TestDate', 'desc1', '02.07.2018', '07.07.2018', 'tag', '5']
+2018-06-29 09:33:16,361, parse_task, [INFO]: Trying to add task with the name - TestDate
+2018-06-29 09:33:16,474, parse_task, [INFO]: Task is successfully added
+2018-06-29 09:34:47,141, parser, [INFO]: List of arguments : ['task', 'add', 'Antoha', '12345', 'Project337', 'NewColumn', 'TestDate1', 'desc1', '02.07.2018', '07.07.2018', 'tag', '5']
+2018-06-29 09:34:47,150, parse_task, [INFO]: Trying to add task with the name - TestDate1
+2018-06-29 09:34:47,254, parse_task, [INFO]: Task is successfully added

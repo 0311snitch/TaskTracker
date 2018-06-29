@@ -8,7 +8,7 @@ from Tracker.lib.storage_controller.Column import *
 class TaskStorage:
     @classmethod
     def add_task_to_db(cls, task):
-        conn = sqlite3.connect('database.sqlite3')
+        conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("INSERT INTO tasks (name, desc, project_id, column_id, user_id, first_date, second_date, "
                   "edit_date, tags, priority, archive, is_subtask) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',"
@@ -21,7 +21,7 @@ class TaskStorage:
     def delete_task_from_db(cls, task):
         conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
-        c.execute("DELETE FROM tasks WHERE task.id==('%s')"%task.id)
+        c.execute("DELETE FROM tasks WHERE id==('%s')"%task.id)
         conn.commit()
         conn.close()
 

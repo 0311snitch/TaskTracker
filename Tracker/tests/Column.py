@@ -84,5 +84,6 @@ class TestsColumn(unittest.TestCase):
 
         self.assertEqual(status, True)
 
+
 if __name__ == '__main__':
     unittest.main()
