@@ -53,9 +53,17 @@ def get_logger(name):
 
 class LowLoggingFilter(logging.Filter):
     def filter(self, record):
-        return record.levelno <= logging.INFO
+        level = conf.get_logging_level()
+        if level == 0:
+            return record.levelno < logging.DEBUG
+        elif level == 1:
+            return record.levelno <= logging.INFO
 
 
 class HighLoggingFilter(logging.Filter):
     def filter(self, record):
-        return record.levelno > logging.INFO
+        level = conf.get_logging_level()
+        if level == 0:
+            return record.levelno < logging.DEBUG
+        elif level == 1:
+            return record.levelno > logging.INFO

@@ -4,9 +4,10 @@ import os
 import sys
 
 DEFAULT_NAME = 'config'
+HOME = os.environ['HOME']
 
 DEFAULT = 'config'
-#DEFAULT_PATH = os.path.join(HOME, DEFAULT)
+DEFAULT_PATH = os.path.join(HOME, DEFAULT)
 
 
 def create_config(db_path='None', log_path='None', path_to_test_db='None'):
@@ -15,7 +16,6 @@ def create_config(db_path='None', log_path='None', path_to_test_db='None'):
     config.set('settings', 'path_to_log', log_path)
     config.set('settings', 'path_to_db', db_path)
     config.set('settings', 'path_to_test_db', path_to_test_db)
-    config.set('settings', 'logging-level', '1')
 
     path = os.path.dirname(os.path.abspath(__file__))
     path = path[:-7]
@@ -47,20 +47,16 @@ def get_path_to_db():
         path = os.path.dirname(os.path.abspath(__file__))
         path = path[:-7]
         path_to_db = os.path.join(path, 'database.sqlite3')
+        print(path_to_db)
     return path_to_db
 
 
-#def get_path_to_test_db():
-    #config = load_config()
-    #path_to_test_db = config.get('settings', 'path_to_test_db')
-    #if path_to_test_db == 'None':
-        #path_to_test_db = os.path.join(HOME, 'Takinata')
-    #return path_to_test_db
-
-def get_logging_level():
+def get_path_to_test_db():
     config = load_config()
-    level = config.get('settings','logging-level')
-    return level
+    path_to_test_db = config.get('settings', 'path_to_test_db')
+    if path_to_test_db == 'None':
+        path_to_test_db = os.path.join(HOME, 'Takinata')
+    return path_to_test_db
 
 
 def get_path_to_log():

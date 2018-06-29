@@ -1,5 +1,0 @@
-INFO:Logger:Список полученных аргментов : ['user', 'register', 'sad_snitch', '33bahedo33', 'sad_snitch@yandex.ru']
-INFO:Logger:Пробуем зарегестрировать пользователя с именем sad_snitch, паролем 33bahedo33 и e-mail sad_snitch@yandex.ru
-INFO:Logger:Пользователь {} успешно зарегистрирован
-
-

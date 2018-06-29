@@ -43,14 +43,11 @@ class ProjectController:
         user = UserStorage.get_user_by_name(username)
         if user.password == password:
             project = ProjectStorage.get_project(name)
-            if ProjectStorage.check_permission(user, project) == 0:
-                guys = ProjectStorage.get_all_persons_in_project(project)
-                for i in guys:
-                    ProjectController.su_delete_person_from_project(username, password, i, project.name)
-                ProjectStorage.delete_with_object(project)
-            else:
-                log.error("User {} does not have access to the project".format(username))
-                raise NoPermission
+            ProjectStorage.check_permission(user, project)
+            guys = ProjectStorage.get_all_persons_in_project(project)
+            for i in guys:
+                ProjectController.su_delete_person_from_project(username, password, i, project.name)
+            ProjectStorage.delete_with_object(project)
         else:
             log.error("Incorrect password for {}".format(username))
             raise IncorrentPassword
@@ -142,20 +139,17 @@ class ProjectController:
         admin = UserStorage.get_user_by_name(username)
         person = UserStorage.get_user_by_id(person)
         if admin.password == password:
-            if ProjectStorage.is_admin(admin, project) == 0:
-                guys = ProjectStorage.get_all_persons_in_project(project)
-                have = False
-                for i in range(len(guys)):
-                    if guys[i][0] == person.user_id:
-                        have = True
-                if not have:
-                    log.error("User is not exist")
-                    raise UserIsNotExistInProject
-                else:
-                    ProjectStorage.delete_person_from_project(person, project)
+            ProjectStorage.is_admin(admin, project)
+            guys = ProjectStorage.get_all_persons_in_project(project)
+            have = False
+            for i in range(len(guys)):
+                if guys[i][0] == person.user_id:
+                    have = True
+            if not have:
+                log.error("User is not exist")
+                raise UserIsNotExistInProject
             else:
-                log.error("You are not the Creator of the project")
-                raise UAreNotAdmin
+                ProjectStorage.delete_person_from_project(person, project)
         else:
             log.error("Incorrect password for {}".format(username))
             raise IncorrentPassword
@@ -203,12 +197,9 @@ class ProjectController:
         project = ProjectStorage.get_project(project_name)
         print(project_name)
         if person.password == password:
-            if ProjectStorage.is_admin(person, project) == 0:
-                project.name = new_name
-                ProjectStorage.save(project)
-            else:
-                log.error("You are not the Creator of the project")
-                raise UAreNotAdmin
+            ProjectStorage.is_admin(person, project)
+            project.name = new_name
+            ProjectStorage.save(project)
         else:
             log.error("Incorrect password for {}".format(username))
             raise IncorrentPassword
@@ -228,12 +219,9 @@ class ProjectController:
         person = UserStorage.get_user_by_name(username)
         project = ProjectStorage.get_project(project_name)
         if person.password == password:
-            if ProjectStorage.is_admin(person, project) == 0:
-                project.description = new_desc
-                ProjectStorage.save(project)
-            else:
-                log.error("You are not the Creator of the project")
-                raise UAreNotAdmin
+            ProjectStorage.is_admin(person, project)
+            project.description = new_desc
+            ProjectStorage.save(project)
         else:
             log.error("Incorrect password for {}".format(username))
             raise IncorrentPassword

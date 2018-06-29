@@ -104,6 +104,18 @@ def check_notifications(username, password):
     else:
         raise IncorrentPassword
 
+def check_db_exists(path):
+
+    config.check_tracker_folder(path)
+    path_to_db = os.path.join(path, 'database.sqlite3')
+    #if not os.path.exists(path_to_db):
+     #   ControlTask.create_tables(path_to_db)
+      #  ControlPlan.create_tables(path_to_db)
+       # ControlUser.create_tables(path_to_db)
+        #ControlProject.create_tables(path_to_db)
+        #ControlNotif.create_tables(path_to_db)
+
+
 def parse(args):
     """
     The point of entry to the program, where it is determined which handler is needed.
@@ -113,6 +125,9 @@ def parse(args):
     log_tag = "parser"
     log = logger.get_logger(log_tag)
     count = len(args)
+    check_db_exists(conf.get_path_to_db())
+    path = conf.get_path_to_db()
+    path = os.path.join(path, 'database.sqlite3')
     if count == 0:
         no_category()
         log.error('Incorrect number of arguments')
@@ -129,7 +144,7 @@ def parse(args):
                 parse_user(subcategory, args[2:])
             if category == Categories.project:
                 if len(args) > 4:
-                    check_notifications(args[2], args[3])
+                    check_notifications(args[3], args[4])
                 parse_project(subcategory, args[2:])
             elif category == Categories.column:
                 if len(args) > 4:

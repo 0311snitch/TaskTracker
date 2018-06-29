@@ -17,6 +17,7 @@ class UserStorage:
                                                                                          user.email))
         conn.commit()
         conn.close()
+        return
 
     @classmethod
     def get_all_users(cls):
@@ -24,6 +25,7 @@ class UserStorage:
         c = conn.cursor()
         c.execute("SELECT username FROM users")
         all_usernames = c.fetchall()
+        conn.close()
         return all_usernames
 
     @classmethod
@@ -32,6 +34,7 @@ class UserStorage:
         c = conn.cursor()
         c.execute("SELECT * FROM projects WHERE name==('%s')" % name)
         data = c.fetchone()
+        conn.close()
         project = Project(data[1], data[2], data[3], None, data[0])
         return project
 
@@ -42,9 +45,11 @@ class UserStorage:
         c.execute("SELECT * FROM users WHERE username==('%s')" % name)
         data = c.fetchone()
         if data is None:
+            conn.close()
             raise NoUser
         else:
             user = User(data[1], data[2], data[3], data[0])
+            conn.close()
             return user
 
     @classmethod
@@ -75,7 +80,6 @@ class UserStorage:
             c = conn.cursor()
             c.execute("SELECT id, password FROM users WHERE username==('%s') " % username)
             data = c.fetchone()
-            conn.close()
             return data[1]
         except:
             return 1
@@ -121,6 +125,7 @@ class UserStorage:
         c = conn.cursor()
         c.execute("SELECT current_id FROM current WHERE id==('%d')" % 1)
         id = c.fetchone()[0]
+        conn.close()
         if id == 0:
             return True
         else:

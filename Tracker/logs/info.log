@@ -1,6 +1,42 @@
-2018-06-29 01:03:24,696, parser, [INFO]: List of arguments : ['user', 'register', 'Trippie Red', 'rapper', 'rapper@xxl.com']
-2018-06-29 01:03:24,696, parse_user, [INFO]: Attempt to register a user with a name - Trippie Red, password -  rapper and e-mail - rapper@xxl.com
-2018-06-29 01:11:12,792, parser, [INFO]: List of arguments : ['user', 'register', 'Trippie Red', 'rapper', 'rapper@xxl.com']
-2018-06-29 01:11:12,793, parse_user, [INFO]: Attempt to register a user with a name - Trippie Red, password -  rapper and e-mail - rapper@xxl.com
-2018-06-29 01:30:32,830, parser, [INFO]: List of arguments : ['user', 'register', 'Trippie Red', 'rapper', 'rapper@xxl.com']
-2018-06-29 01:30:32,830, parse_user, [INFO]: Attempt to register a user with a name - Trippie Red, password -  rapper and e-mail - rapper@xxl.com
+2018-06-29 02:43:29,986, parser, [INFO]: List of arguments : ['user', 'register', 'LilSkies', 'bestrapper', 'gma@gma.com']
+2018-06-29 02:43:29,986, parse_user, [INFO]: Attempt to register a user with a name - LilSkies, password -  bestrapper and e-mail - gma@gma.com
+2018-06-29 02:44:31,428, parser, [INFO]: List of arguments : ['user', 'register', 'LilSkies', 'bestrapper', 'gma@gma.com']
+2018-06-29 02:44:31,429, parse_user, [INFO]: Attempt to register a user with a name - LilSkies, password -  bestrapper and e-mail - gma@gma.com
+2018-06-29 02:45:06,247, parser, [INFO]: List of arguments : ['user', 'register', 'LilSkies', 'bestrapper', 'gma@gma.com']
+2018-06-29 02:45:06,247, parse_user, [INFO]: Attempt to register a user with a name - LilSkies, password -  bestrapper and e-mail - gma@gma.com
+2018-06-29 02:49:38,809, parser, [INFO]: List of arguments : ['user', 'register', 'LilSkies', 'bestrapper', 'gma@gma.com']
+2018-06-29 02:49:38,809, parse_user, [INFO]: Attempt to register a user with a name - LilSkies, password -  bestrapper and e-mail - gma@gma.com
+2018-06-29 02:50:17,779, parser, [INFO]: List of arguments : ['user', 'register', 'LilSkies', 'bestrapper', 'gma@gma.com']
+2018-06-29 02:50:17,781, parse_user, [INFO]: Attempt to register a user with a name - LilSkies, password -  bestrapper and e-mail - gma@gma.com
+2018-06-29 06:54:15,063, parser, [INFO]: List of arguments : ['user', 'register', 'LilSkies', 'bestrapper', 'gma@gma.com']
+2018-06-29 06:54:15,064, parse_user, [INFO]: Attempt to register a user with a name - LilSkies, password -  bestrapper and e-mail - gma@gma.com
+2018-06-29 07:01:13,714, parser, [INFO]: List of arguments : ['user', 'register', 'LilSkies', 'bestrapper', 'gma@gma.com']
+2018-06-29 07:01:13,715, parse_user, [INFO]: Attempt to register a user with a name - LilSkies, password -  bestrapper and e-mail - gma@gma.com
+2018-06-29 07:09:25,618, parser, [INFO]: List of arguments : ['project', 'add', 'test_user', 'test_password', 'Kek', 'LoL']
+2018-06-29 07:09:38,671, parser, [INFO]: List of arguments : ['project', 'add', 'Antoha', '12345', 'Kek', 'LoL']
+2018-06-29 07:36:34,450, parser, [INFO]: List of arguments : ['user', 'register', 'test', 'test', 'test@gmail.com']
+2018-06-29 07:36:34,451, parse_user, [INFO]: Attempt to register a user with a name - test, password -  test and e-mail - test@gmail.com
+2018-06-29 07:36:34,558, parse_user, [INFO]: User test successfully registered
+2018-06-29 07:42:45,766, parser, [INFO]: List of arguments : ['project', 'add', 'test', 'test', 'TestProject', 'TestDescription']
+2018-06-29 07:45:14,790, parser, [INFO]: List of arguments : ['project', 'add', 'test', 'test', 'TestProject', 'TestDescription']
+2018-06-29 07:46:47,685, parser, [INFO]: List of arguments : ['project', 'add', 'Antoha', '12345', 'MyFavouriteProject', 'Desc']
+2018-06-29 07:47:35,971, parser, [INFO]: List of arguments : ['project', 'add', 'Antoha', '12345', 'MyFavouriteProject', 'Desc']
+2018-06-29 07:48:22,933, parser, [INFO]: List of arguments : ['user', 'register', 'test', 'test', 'test']
+2018-06-29 07:48:22,934, parse_user, [INFO]: Attempt to register a user with a name - test, password -  test and e-mail - test
+2018-06-29 07:48:28,077, parser, [INFO]: List of arguments : ['user', 'register', 'kekester', '1', '2']
+2018-06-29 07:48:28,078, parse_user, [INFO]: Attempt to register a user with a name - kekester, password -  1 and e-mail - 2
+2018-06-29 07:48:28,162, parse_user, [INFO]: User kekester successfully registered
+2018-06-29 07:48:58,433, parser, [INFO]: List of arguments : ['user', 'register', 'kekester', '1', '2']
+2018-06-29 07:48:58,436, parse_user, [INFO]: Attempt to register a user with a name - kekester, password -  1 and e-mail - 2
+2018-06-29 07:49:01,125, parser, [INFO]: List of arguments : ['project', 'add', 'Antoha', '12345', 'MyFavouriteProject', 'Desc']
+2018-06-29 07:49:58,878, parser, [INFO]: List of arguments : ['project', 'add', 'Antoha', '12345', 'MyFavouriteProject', 'Desc']
+2018-06-29 07:50:41,317, parser, [INFO]: List of arguments : ['project', 'add', 'Antoha', '12345', 'MyFavouriteProject', 'Desc']
+2018-06-29 07:51:16,300, parser, [INFO]: List of arguments : ['project', 'add', 'Antoha', '12345', 'MyFavouriteProject', 'Desc']
+2018-06-29 07:51:16,305, parse_project, [INFO]: Trying to create a project with the name - MyFavouriteProject and description - Desc
+2018-06-29 07:51:16,461, parse_project, [INFO]: Project MyFavouriteProject was successfully created
+2018-06-29 07:53:49,184, parser, [INFO]: List of arguments : ['project', 'add', 'test', 'test', 'TestProject', 'TestDesc']
+2018-06-29 07:53:49,186, parse_project, [INFO]: Trying to create a project with the name - TestProject and description - TestDesc
+2018-06-29 07:53:49,355, parse_project, [INFO]: Project TestProject was successfully created
+2018-06-29 08:09:57,039, parser, [INFO]: List of arguments : ['column', 'add', 'test', 'test', 'TestProject', 'TestColumn', 'TestDesc']
+2018-06-29 08:09:57,041, parse_column, [INFO]: Trying to create a column with the name - TestColumn and description - TestDesc
+2018-06-29 08:09:57,131, parse_column, [INFO]: Column TestColumn was successfully created

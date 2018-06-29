@@ -1,5 +1,6 @@
 import sqlite3
 
+import Tracker.lib.conf as conf
 from Tracker.lib.models.Column import Column
 from Tracker.lib.storage_controller.Project import ProjectStorage
 from Tracker.lib.Exception import *
