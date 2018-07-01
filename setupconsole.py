@@ -3,7 +3,7 @@ from setuptools import setup
 packages = ['console', 'console.parser_api', 'console.presentations']
 
 setup(
-    name='task_tracker',
+    name='console_api',
     version='0.1',
     author='sad_snitch',
     author_email='0311snitch@gmail.com',

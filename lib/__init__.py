@@ -10,7 +10,9 @@ controllers - a package that describes the logic of incoming data processing and
 models - package describing the content (fields) of all entities
 
 storage - a package that describes the database interaction logic. The data from the controller is received to the
-input, which, in turn, are loaded or, conversely, unloaded from the database __________
+input, which, in turn, are loaded or, conversely, unloaded from the database
+
+__________
 
 Description of internal files
 

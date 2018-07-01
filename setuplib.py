@@ -5,7 +5,7 @@ from setuptools import setup
 packages = ['lib','lib.controllers','lib.models','lib.storage_controller']
 
 setup(
-    name='tasklib',
+    name='takinata_lib',
     version='0.1',
     author='sad_snitch',
     author_email='0311snitch@gmail.com',
