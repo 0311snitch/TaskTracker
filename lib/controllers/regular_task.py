@@ -1,46 +1,59 @@
 import lib.logger as logger
 
 from datetime import *
-from lib.storage_controller.RegularTask import *
-from lib.storage_controller.User import *
+from lib.storage.project import *
+from lib.storage.column import *
+from lib.storage.regular_task import *
+from lib.storage.user import *
+from lib.models.regular_task import *
 
 
 class RegularTaskController:
+    log_tag = "RegularTaskController"
+
     @classmethod
     def add_task(cls, username, password, project_name, column_name, name, desc, first_date, second_date, step,
                  type_of_step, tags, priority):
         """
-        Создает регулярную задачу в выбранной колонке выбранного проекта с указанным шагом перехода и указанными времен-
-        ными границами
-        :param username:
-        :param password:
-        :param project_name:
-        :param column_name:
-        :param name:
-        :param desc:
-        :param first_date:
-        :param second_date:
-        :param step:
-        :param edit_date:
-        :param tags:
-        :param priority:
+        Creates a regular task in the selected column of the selected project with the specified transition step and
+        the specified times- by borders
+        :param username: The name of the user who creates the task
+        :param password: User password
+        :param project_name: Project name where the task will be created
+        :param column_name: Name of the column where the task will be created
+        :param name: Task name
+        :param desc: Task description
+        :param first_date: The start date of task execution
+        :param second_date: Task end date
+        :param step: Step length
+        :param type_of_step: Kind of step (minute/hour/day/month)
+        :param edit_date: Date of last task editing
+        :param tags: Tags
+        :param priority: Task priority
         :return:
         """
-        log_tag = "add_regular_task"
-        log = logger.get_logger(log_tag)
+        log = logger.get_logger(RegularTaskController.log_tag)
         project = ProjectStorage.get_project(project_name)
         column = ColumnStorage.get_column(project_name, column_name)
         user = UserStorage.get_user_by_name(username)
+        steps = ['day', 'week', 'month', 'year']
         if user.password == password:
+            start = datetime.strptime(first_date, "%d.%m.%Y")
+            end = datetime.strptime(second_date, "%d.%m.%Y")
+            today = datetime.today()
+            if start < today or end < today:
+                raise IncorrentDate
+            if end < start:
+                log.error("EndDate is before StartDate")
+                raise EndBeforeStart
+            if type_of_step not in steps:
+                log.error("Incorrect type of step")
+                raise IncorrectTypeOfStep
             try:
-                start = datetime.strptime(first_date, "%d.%m.%Y")
-                end = datetime.strptime(first_date, "%d.%m.%Y")
-                if end < start:
-                    log.error("EndDate is before StartDate")
-                    raise EndBeforeStart
-            except Exception:
-                log.error("It's not a date")
-                raise NotDate
+                priority = int(priority)
+            except Exception as err:
+                log.error(err)
+                raise ItsNotANumber
             ProjectStorage.check_permission(user, project)
             task_names = RegularTaskStorage.get_all_tasks(project_name, column_name)
             have = False
@@ -49,7 +62,7 @@ class RegularTaskController:
                     have = True
             if not have:
                 regular_task = RegularTask(name, desc, project.id, column.id, user.user_id, first_date, second_date,
-                                           step, type_of_step, str(date.today()), tags, priority, 0)
+                                           step, type_of_step, tags, priority, 0, 0, str(date.today()))
                 RegularTaskStorage.add_task_to_db(regular_task)
                 return regular_task
             else:
@@ -57,7 +70,7 @@ class RegularTaskController:
                 raise TaskWithThisNameAlreadyExist(name)
         else:
             log.error("Incorrect password for {}".format(username))
-            raise IncorrentPassword
+            raise WrongPassword
 
     @classmethod
     def delete_task(cls, username, password, project_name, column_name, task_name):
@@ -70,8 +83,7 @@ class RegularTaskController:
         :param task_name:
         :return:
         """
-        log_tag = "task_delete"
-        log = logger.get_logger(log_tag)
+        log = logger.get_logger(RegularTaskController.log_tag)
         user = UserStorage.get_user_by_name(username)
         project = ProjectStorage.get_project(project_name)
         if user.password == password:
@@ -84,4 +96,80 @@ class RegularTaskController:
             RegularTaskStorage.delete_task_from_db(task)
         else:
             log.error("Incorrect password for {}".format(username))
-            raise IncorrentPassword
+            raise WrongPassword
+
+    @classmethod
+    def show_tasks(cls, username, password, project_name, column_name, key=None):
+        """
+        Shows tasks for the specified column
+        :param key:
+        :param username:
+        :param password:
+        :param project_name:
+        :param column_name:
+        :return:
+        """
+        log = logger.get_logger(RegularTaskController.log_tag)
+        user = UserStorage.get_user_by_name(username)
+        project = ProjectStorage.get_project(project_name)
+        column = ColumnStorage.get_column(project_name, column_name)
+        if user.password == password:
+            ProjectStorage.check_permission(user, project)
+            tasks = RegularTaskStorage.get_all_tasks(project_name, column_name, key)
+            return tasks
+        else:
+            log.error("Incorrect password for {}".format(username))
+            raise WrongPassword
+
+    @classmethod
+    def re_create(cls, username, password):
+        """
+
+        :param username:
+        :param password:
+        :return:
+        """
+        log = logger.get_logger(RegularTaskController.log_tag)
+        user = UserStorage.get_user_by_name(username)
+        if user.password == password:
+            tasks = RegularTaskStorage.get_all_tasks_for_user(user)
+            for task in tasks:
+                start_date = datetime.strptime(task.first_date, "%d.%m.%Y")
+                end_date = datetime.strptime(task.second_date, "%d.%m.%Y")
+                if end_date < datetime.today():
+                    print("kek")
+                    if task.type_of_step == 'day':
+                        need = int(task.step)
+                        x = end_date - start_date
+                        print(x)
+                        if x.days >= need:
+                            print("Пересоздаём")
+                            new_start = date.today()
+                            task.first_date = new_start
+                            RegularTaskStorage.save(task)
+                            print("Задача пересоздана и сохранена")
+                    #print("Type - {}, X = {}".format(type(x),x))
+            raise WrongPassword
+            return tasks
+        else:
+            log.error("Incorrect password for {}".format(username))
+            raise WrongPassword
+
+    @classmethod
+    def create_table(cls):
+        RegularTaskStorage.create_table()
+
+
+    @classmethod
+    def next_date(cls, task):
+        pass
+
+    @classmethod
+    def get_step(cls, task):
+        num = task.step
+        if task.type_of_step == 'day':
+            return int(num)
+        elif task.type_of_step == 'week':
+            return int(num) * 7
+        elif task.type_of_step == 'month':
+            pass

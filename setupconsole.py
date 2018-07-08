@@ -10,7 +10,6 @@ setup(
     packages=packages,
     description='console part of Takinata',
     include_package_data=False,
-    install_requires=['tasklib==0.1'],
     entry_points={
         'console_scripts':
             ['task_tracker = console.start:main']

@@ -1,8 +1,8 @@
 import sqlite3
 import lib.conf as conf
-from lib.Exception import *
-from lib.models.Task import *
-from lib.storage_controller.Column import *
+from lib.exception import *
+from lib.models.task import *
+from lib.storage.column import *
 
 
 class TaskStorage:
@@ -75,6 +75,7 @@ class TaskStorage:
             task_list.append(task)
         return task_list
 
+
     @classmethod
     def get_task_by_id(cls, project_name, column_name, id):
         conn = sqlite3.connect(conf.get_path_to_db())
@@ -103,5 +104,21 @@ class TaskStorage:
         conn = sqlite3.connect(conf.get_path_to_db())
         c = conn.cursor()
         c.execute("INSERT INTO task_subtask (subtask_id, task_id) VALUES ('%s','%s')" % (task1.id, task2.id))
+        conn.commit()
+        conn.close()
+
+    @classmethod
+    def create_table(cls):
+        """
+
+        :return:
+        """
+        path = conf.get_path_to_db()
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+        c.execute("CREATE TABLE 'tasks' (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name`	TEXT, `desc` TEXT, "
+                  "`project_id`	TEXT, `column_id` TEXT, `user_id` TEXT, `first_date` TEXT, `second_date` TEXT, "
+                  "`edit_date`	TEXT, `tags` TEXT, `priority` TEXT, `archive` TEXT, `is_subtask` TEXT)")
+        c.execute("CREATE TABLE 'task_subtask' (`subtask_id` TEXT, `task_id` TEXT )")
         conn.commit()
         conn.close()

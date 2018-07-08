@@ -1,8 +1,8 @@
-class MyProjectBaseException(Exception):
+class MainException(Exception):
     pass
-# переименовать
 
-class UserException(BaseException):
+
+class UserException(MainException):
     pass
 
 
@@ -11,13 +11,23 @@ class UserAlreadyExist(UserException):
         super().__init__("A user with this name is already registered")
 
 
-class IncorrentPassword(UserException):
+class WrongPassword(UserException):
     def __init__(self):
         super().__init__("Incorrect password")
 
 
-class ProjectException(BaseException):
+class NoUser(UserException):
+    def __init__(self):
+        super().__init__("There is no user with this name")
+
+
+class ProjectException(MainException):
     pass
+
+
+class CannotGetProject(ProjectException):
+    def __init__(self):
+        super().__init__("It is impossible to get project with the specified name")
 
 
 class NoProjectWithThisName(ProjectException):
@@ -60,7 +70,7 @@ class CannotDeleteCreator(ProjectException):
         super().__init__("You can't delete creator of project")
 
 
-class ColumnException(BaseException):
+class ColumnException(MainException):
     pass
 
 
@@ -69,90 +79,95 @@ class NoColumnWithThisName(ProjectException):
         super().__init__("There is no column with this name")
 
 
-class ColumnWithThisNameAlreadyExist(BaseException):
+class ColumnWithThisNameAlreadyExist(ColumnException):
     def __init__(self):
         super().__init__("Column with this name is already exist")
 
 
-class TaskException(BaseException):
+class TaskException(MainException):
     pass
 
 
-class AlreadyInArchive(BaseException):
+class AlreadyInArchive(TaskException):
     def __init__(self):
-        super().__init__("Данная задача уже находится в архиве")
+        super().__init__("This task is already in the archive")
 
 
-class CannotGetProject(BaseException):
-    def __init__(self):
-        super().__init__("Невозможно получить проект с указанным названием")
-
-
-class NoUser(BaseException):
-    def __init__(self):
-        super().__init__("Не существует пользователя с таким именем")
-
-
-class TaskWithThisNameAlreadyExist(BaseException):
+class TaskWithThisNameAlreadyExist(TaskException):
     def __init__(self, name):
-        super().__init__("Задача с названием {} уже существует в выбранной колонке".format(name))
+        super().__init__("A task with the name {} already exists in the selected column".format(name))
 
 
-class NotDate(BaseException):
+class NotDate(TaskException):
     def __init__(self):
-        super().__init__("Введенная дата не совпадает с требуемым форматом")
+        super().__init__("The entered date does not match the required format")
 
 
-class EndBeforeStart(BaseException):
+class EndBeforeStart(TaskException):
     def __init__(self):
-        super().__init__("Указанная дата окончания задачи идет до даты начала задачи")
+        super().__init__("The specified task end date is before the task start date")
 
 
-class StartBeforeToday(BaseException):
+class StartBeforeToday(TaskException):
     def __init__(self):
-        super().__init__("Задача не может быть начата до сегодняшнего дня")
+        super().__init__("The task can not be started until today")
 
 
-class NoTask(BaseException):
+class NoTask(TaskException):
     def __init__(self):
-        super().__init__("Невозможно найти задачу с таким названием")
+        super().__init__("Cannot find a task with this name")
 
 
-class XXXXXX(Exception):
+class SubTaskDateException(TaskException):
     def __init__(self):
-        super().__init__("ЭксЭксЭксТентасьон")
+        super().__init__("The time boundaries of the subtask must be within the time boundaries of the parent task")
 
 
-class SubtaskDateException(BaseException):
+class SubTaskPriorityException(TaskException):
     def __init__(self):
-        super().__init__("Временные границы подзадачи должны входить во временные границы родительской задачи")
+        super().__init__("The priority of the subtask cannot be higher than the priority of the parent task")
 
 
-class SubtaskPriorityException(BaseException):
+class AlreadySubtask(TaskException):
     def __init__(self):
-        super().__init__("Приоритет подзадачи не может быть выше приоритета родительской задачи")
+        super().__init__("This task is already a subtask")
 
 
-class AlreadySubtask(BaseException):
+class CanNotDeleteBecauseSubtasks(TaskException):
     def __init__(self):
-        super().__init__("Данная задача уже является подзадачей")
+        super().__init__("You cannot delete a task until all subtasks are completed")
 
 
-class CanNotDeleteBecauseSubtasks(BaseException):
+class ItsNotANumber(TaskException):
     def __init__(self):
-        super().__init__("Невозможно удалить задачу, пока не завершены все подзадачи")
+        super().__init__("Priority - it's not a number")
 
 
-class TypeErro(BaseException):
+class IncorrentDate(TaskException):
     def __init__(self):
-        super().__init__("Ошибка приведения типов")
+        super().__init__("Incorrect date")
 
 
-class ThereIsNoSuchCategory(BaseException):
+class IncorrectTypeOfStep(TaskException):
     def __init__(self):
-        super().__init__("Такой категории команд не существует")
+        super().__init__("Incorrect type of step. Choose one from [day,month,year]")
 
 
-class ThereIsNoSuchSubcategory(BaseException):
+class ThisFeatureDoesNotExist(TaskException):
     def __init__(self):
-        super().__init__("Нет такой команды")
+        super().__init__("This feature does not exist for sorting")
+
+
+class TypeErr(BaseException):
+    def __init__(self):
+        super().__init__("Type conversion error")
+
+
+class ThereIsNoSuchCategory(MainException):
+    def __init__(self):
+        super().__init__("This category of commands does not exist")
+
+
+class ThereIsNoSuchSubcategory(MainException):
+    def __init__(self):
+        super().__init__("There is no such command")

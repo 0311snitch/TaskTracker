@@ -2,7 +2,7 @@ from os.path import join, dirname
 
 from setuptools import setup
 
-packages = ['lib','lib.controllers','lib.models','lib.storage_controller']
+packages = ['lib','lib.controllers','lib.models','lib.storage']
 
 setup(
     name='takinata_lib',

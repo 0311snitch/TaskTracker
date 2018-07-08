@@ -2,23 +2,22 @@ from enum import Enum
 
 import os
 
-import console.presentations.Column as column_view
-import console.presentations.User as user_view
-import console.presentations.Project as project_view
-from console.presentations.Project import *
-from console.presentations.RegularTask import *
-from console.presentations.Task import *
-from lib import conf
-from lib.controllers.Column import *
-from lib.controllers.Project import *
-from lib.controllers.RegularTask import *
-from lib.controllers.Task import *
-from lib.controllers.User import *
-from lib.storage_controller.Task import *
-from lib.storage_controller.User import *
+import console.presentations.column as column_view
+import console.presentations.user as user_view
+import console.presentations.project as project_view
+import console.presentations.task as task_view
+from console.presentations.project import *
+from console.presentations.regular_task import *
+from lib.controllers.column import *
+from lib.controllers.project import *
+from lib.controllers.regular_task import *
+from lib.controllers.task import *
+from lib.controllers.user import *
+from lib.storage.task import *
+from lib.storage.user import *
 import lib.logger as logger
-import console.config as config
-from lib.Exception import *
+from lib.exception import *
+import console.config as confi
 
 
 class Categories(Enum):
@@ -47,14 +46,14 @@ class SubCategories(Enum):
 def set_category(arg):
     try:
         return Categories[arg]
-    except:
+    except Exception as err:
         raise ThereIsNoSuchCategory
 
 
 def set_subcategory(arg):
     try:
         return SubCategories[arg]
-    except:
+    except Exception as err:
         raise ThereIsNoSuchSubcategory
 
 
@@ -95,15 +94,17 @@ def check_notifications(username, password):
                 today_date = datetime.today()
                 if new_date.year == today_date.year and new_date.month == today_date.month:
                     if 10 <= new_date.day - today_date.day < 20:
-                        print("The task needs to be addressed {}. Until the end of the task, only {} day(s)".format(y.name,
-                                                                                        new_date.day - today_date.day))
+                        print("The task needs to be addressed {}. Until the end of the task, only {} day(s)".format(
+                            y.name,
+                            new_date.day - today_date.day))
                     elif 1 <= new_date.day - today_date.day < 5:
                         print("YOU URGENTLY NEED TO ENGAGE IN THE TASK '{}' . LEFT {} day(s).".format(
                             y.name, new_date.day - today_date.day))
                     elif new_date.day - today_date.day < 1:
                         print("You have expired task {}. A good solution would be to archive it".format(y.name))
     else:
-        raise IncorrentPassword
+        raise WrongPassword
+
 
 def parse(args):
     """
@@ -111,6 +112,7 @@ def parse(args):
     :param args:
     :return:
     """
+    check_db_exists(conf.get_path_to_db())
     log_tag = "parser"
     log = logger.get_logger(log_tag)
     count = len(args)
@@ -121,7 +123,7 @@ def parse(args):
         no_subcategory()
         log.error("No subcommand")
     else:
-        try:
+        #try:
             category = set_category(args[0])
             subcategory = set_subcategory(args[1])
             log.info("List of arguments : {}".format(args))
@@ -129,24 +131,28 @@ def parse(args):
             if category == Categories.user:
                 parse_user(subcategory, args[2:])
             if category == Categories.project:
-                #if len(args) > 4:
-                   # check_notifications(args[2], args[3])
+                if len(args) > 4:
+                    check_notifications(args[2], args[3])
                 parse_project(subcategory, args[2:])
             elif category == Categories.column:
-                #if len(args) > 4:
-                    #check_notifications(args[2], args[3])
+                if len(args) > 4:
+                    check_notifications(args[2], args[3])
                 parse_column(subcategory, args[2:])
             elif category == Categories.task:
-                #if len(args) > 4:
-                    #check_notifications(args[2], args[3])
+                if len(args) > 4:
+                    check_notifications(args[2], args[3])
                 parse_task(subcategory, args[2:])
             elif category == Categories.regular_task:
-                #if len(args) > 4:
-                    #check_notifications(args[2], args[3])
+                if len(args) > 4:
+                    RegularTaskController.re_create(args[3],args[4])
+                    if subcategory != SubCategories.show:
+                        check_notifications(args[2], args[3])
+                    else:
+                        check_notifications(args[3], args[4])
                 parse_regular_task(subcategory, args[2:])
-        except BaseException as error:
-            log.error(error)
-            print(error)
+        #except BaseException as error:
+            #log.error(error)
+            #print(error)
 
 
 def parse_user(subcategory, args):
@@ -305,7 +311,7 @@ def parse_column(subcategory, args):
             if args[0] == 'name':
                 ColumnController.edit_name(args[1], args[2], args[3], args[4], args[5])
                 column_view.success_edit()
-                log.info("Column {} is successfully edited. New name is {}".format(args[4],args[5]))
+                log.info("Column {} is successfully edited. New name is {}".format(args[4], args[5]))
             elif args[0] == 'description' or 'desc':
                 ColumnController.edit_desc(args[1], args[2], args[3], args[4], args[5])
                 column_view.success_edit()
@@ -336,18 +342,18 @@ def parse_task(subcategory, args):
     if subcategory == SubCategories.add:
         if len(args) != 10:
             log.error("Incorrect number of arguments. Expected {} , but {} was recieved".format(10, len(args)))
-            TaskView.create_format()
+            task_view.create_format()
         else:
             log.info("Trying to add task with the name - {}".format(args[4]))
             task = TaskController.add_task(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7],
                                            args[8], args[9])
-            TaskView.success_create(task)
+            task_view.success_create(task)
             log.info("Task is successfully added")
     if subcategory == SubCategories.show:
         if args[0] == 'all':
             log.info("Trying to show all tasks in this column of project")
             tasks = TaskController.show_tasks(args[1], args[2], args[3], args[4])
-            TaskView.show_tasks(tasks)
+            task_view.show_tasks(tasks)
             log.info("All task was shown")
     if subcategory == SubCategories.delete:
         if len(args) != 5:
@@ -360,17 +366,17 @@ def parse_task(subcategory, args):
     if subcategory == SubCategories.edit:
         if len(args) != 7:
             log.error("Incorrect number of arguments. Expected {} , but {} was recieved".format(7, len(args)))
-            TaskView.edit_format()
+            task_view.edit_format()
         else:
             log.info("Tring to edit a column")
             TaskController.edit(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
-            TaskView.success_edit()
+            task_view.success_edit()
             log.info("Task is successfully edited")
     if subcategory == SubCategories.subtask:
         if args[0] == 'add':
             if len(args) != 7:
                 log.error("Incorrect number of arguments. Expected {} , but {} was recieved".format(4, len(args)))
-                TaskView.add_subtask_format()
+                task_view.add_subtask_format()
             else:
                 log.info("Trying to set subtask to task")
                 TaskController.set_subtask(args[1], args[2], args[3], args[4], args[5], args[6])
@@ -396,4 +402,33 @@ def parse_regular_task(subcategory, args):
                                                   args[7],
                                                   args[8], args[9], args[10], args[11])
             log.info("Tasi is successfully created")
-            TaskView.success_create(task)
+            task_view.success_create(task)
+    if subcategory == SubCategories.show:
+        if len(args) != 5 and len(args) != 6:
+            log.error("Incorrect number of arguments. Expected {} , but {} was recieved".format(12, len(args)))
+            RegularTaskView.show_format()
+        else:
+            if args[0] == 'all':
+                if len(args) == 6:
+                    key = args[5]
+                else:
+                    key = None
+                log.info("Trying to show all tasks in this column of project")
+                tasks = RegularTaskController.show_tasks(args[1], args[2], args[3], args[4], key)
+                RegularTaskView.show_tasks(tasks)
+                log.info("All task was shown")
+
+
+def check_db_exists(path):
+    """
+    Checks if the database exists in the specified directory. If not - creates this base
+    :param path: path to database
+    :return:
+    """
+    if confi.check_tracker_folder(path) == 1:
+        print("погнали")
+        TaskController.create_table()
+        RegularTaskController.create_table()
+        UserController.create_table()
+        ProjectController.create_table()
+        ColumnController.create_table()
